@@ -7,13 +7,15 @@ import java.util.ArrayList;
 public class RepositoryInfo {
 
 
-    private String name;
-    private String ownerName;
+    private String repositoryName;
+
+    private String ownerLogin;
     private ArrayList<BranchInfo> branches;
 
-    public RepositoryInfo(String name, String ownerName) {
-        this.name = name;
-        this.ownerName = ownerName;
+    public RepositoryInfo(String repositoryName, String ownerLogin) {
+        this.repositoryName = repositoryName;
+        this.ownerLogin = ownerLogin;
     }
 
 }
+

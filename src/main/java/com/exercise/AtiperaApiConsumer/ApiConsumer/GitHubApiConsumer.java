@@ -59,7 +59,7 @@ public class GitHubApiConsumer {
 
                 RepositoryInfo repo = infoMapper.map();
 
-                repo.setBranches(getBranchesOfProject(repo.getOwnerName(),repo.getName(),entity));
+                repo.setBranches(getBranchesOfProject(repo.getOwnerLogin(),repo.getRepositoryName(),entity));
                 repositoriesList.add(repo);
 
             }

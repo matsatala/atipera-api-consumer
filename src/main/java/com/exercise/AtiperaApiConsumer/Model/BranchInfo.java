@@ -6,11 +6,11 @@ import lombok.Data;
 public class BranchInfo {
 
     private String branchName;
-    private String sha;
+    private String branchSha;
 
     public BranchInfo(String branchName, String sha) {
         this.branchName = branchName;
-        this.sha = sha;
+        this.branchSha = sha;
     }
 
 }
