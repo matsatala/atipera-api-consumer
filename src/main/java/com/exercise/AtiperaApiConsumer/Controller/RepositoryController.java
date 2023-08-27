@@ -4,6 +4,9 @@ import com.exercise.AtiperaApiConsumer.ApiConsumer.GitHubApiConsumer;
 import com.exercise.AtiperaApiConsumer.Model.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -21,14 +24,14 @@ public class RepositoryController {
     }
 
     @GetMapping("/repositories/{username}/{format}")
-    public String getListOfRepositories(@PathVariable String username, @PathVariable String format) throws JsonProcessingException {
+    public ResponseEntity<String> getListOfRepositories(@PathVariable String username, @PathVariable String format) throws JsonProcessingException {
 
         String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
         String encodedFormat = URLEncoder.encode(format,StandardCharsets.UTF_8);
         ObjectMapper objectMapper = new ObjectMapper();
         try{
 
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(apiConsumer.GetListOfReposOfUser(encodedUsername,encodedFormat));
+            return new ResponseEntity<>(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(apiConsumer.GetListOfReposOfUser(encodedUsername,encodedFormat)), HttpStatus.OK);
 
         }catch (HttpClientErrorException e){
 
@@ -37,13 +40,13 @@ public class RepositoryController {
                 ErrorResponse errorResponse = new ErrorResponse(
                         e.getStatusCode(), "unsupported type of file: " + encodedFormat + ", please use json");
 
-                return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorResponse);
+                return new ResponseEntity<>(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorResponse),HttpStatus.NOT_ACCEPTABLE);
 
             }else {
 
                 ErrorResponse errorResponse = new ErrorResponse(e.getStatusCode(), "couldn't find a user with username: " + encodedUsername);
 
-                return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorResponse);
+                return new ResponseEntity<>( objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorResponse),HttpStatus.NOT_FOUND);
 
             }
         }
